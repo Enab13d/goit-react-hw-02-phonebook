@@ -21,6 +21,12 @@ export class App extends Component {
     const value = name.value;
     let id = nanoid();
     this.setState(prevState => {
+      const isContain = prevState.contacts.some(
+        contact => contact.name === value
+      );
+      if (isContain) {
+        return alert(`${value} is already in contacts.`);
+      }
       const updatedContacts = [...prevState.contacts];
       updatedContacts.push({ name: value, number: number.value, id });
       return { contacts: updatedContacts };
@@ -28,16 +34,29 @@ export class App extends Component {
   };
 
   handleFilterChange = e => this.setState({ filter: e.target.value });
+  handleDeleteBtnClick = e => {
+    this.setState(prevState => {
+      return {
+        contacts: [...prevState.contacts].filter(
+          contact => contact.id !== e.target.id
+        ),
+      };
+    });
+  };
   render() {
     const { contacts, filter } = this.state;
-    const { handleSubmit, handleFilterChange } = this;
+    const { handleSubmit, handleFilterChange, handleDeleteBtnClick } = this;
     return (
       <>
         <h1>Phonebook</h1>
         <ContactForm handleSubmit={handleSubmit}></ContactForm>
         <h2>Contacts</h2>
         <Filter handleFilterChange={handleFilterChange}></Filter>
-        <ContactList filter={filter} contacts={contacts}></ContactList>
+        <ContactList
+          filter={filter}
+          contacts={contacts}
+          handleDeleteBtnClick={handleDeleteBtnClick}
+        ></ContactList>
       </>
     );
   }

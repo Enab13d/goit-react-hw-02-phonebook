@@ -1,23 +1,35 @@
 import { List } from './ContactList.styled';
 import { Contact } from '../Contact';
-export const ContactList = ({ filter, contacts }) => {
-  console.log(contacts);
-  return filter === '' ? (
-    <List>
-      {contacts.map(({ name, number, id }) => {
-        return (
-          // Contact
-          <Contact key={id} name={name} number={number}></Contact>
-        );
-      })}
-    </List>
-  ) : (
-    <List>
-      {[...contacts]
-        .filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase()))
-        .map(({ name, number, id }) => {
-          return <Contact key={id} name={name} number={number}></Contact>;
+import { Component } from 'react';
+export class ContactList extends Component {
+  render() {
+    const { filter, contacts, handleDeleteBtnClick } = this.props;
+    return filter === '' ? (
+      <List>
+        {contacts.map(({ name, number, id }) => {
+          return (
+            <Contact key={id} id={id} name={name} number={number} handleDeleteBtnClick={handleDeleteBtnClick}></Contact>
+          );
         })}
-    </List>
-  );
-};
+      </List>
+    ) : (
+      <List>
+        {[...contacts]
+          .filter(({ name }) =>
+            name.toLowerCase().includes(filter.toLowerCase())
+          )
+          .map(({ name, number, id }) => {
+            return (
+              <Contact
+                key={id}
+                id={id}
+                name={name}
+                number={number}
+                handleDeleteBtnClick={handleDeleteBtnClick}
+              ></Contact>
+            );
+          })}
+      </List>
+    );
+  }
+}
