@@ -23,12 +23,22 @@ export class App extends Component {
       if (isContain) {
         return alert(`${value} is already in contacts.`);
       }
-      const updatedContacts = [...prevState.contacts];
-      updatedContacts.push({ name: value, number: number.value, id });
+      const updatedContacts = [
+        ...prevState.contacts,
+        { name: value, number: number.value, id },
+      ];
+      e.target.reset();
       return { contacts: updatedContacts };
     });
   };
+  getFoundContacts = () => {
+    const { contacts, filter } = this.state;
 
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
   handleFilterChange = e => this.setState({ filter: e.target.value });
   handleDeleteBtnClick = e => {
     this.setState(prevState => {
@@ -39,8 +49,11 @@ export class App extends Component {
       };
     });
   };
+
   render() {
-    const { contacts, filter } = this.state;
+    const { getFoundContacts } = this;
+    const filteredContacts = getFoundContacts();
+
     const { handleSubmit, handleFilterChange, handleDeleteBtnClick } = this;
     return (
       <Wrapper>
@@ -49,8 +62,7 @@ export class App extends Component {
         <h2>Contacts</h2>
         <Filter handleFilterChange={handleFilterChange}></Filter>
         <ContactList
-          filter={filter}
-          contacts={contacts}
+          contacts={filteredContacts}
           handleDeleteBtnClick={handleDeleteBtnClick}
         ></ContactList>
       </Wrapper>
