@@ -18,7 +18,7 @@ export class App extends Component {
     let id = nanoid();
     this.setState(prevState => {
       const isContain = prevState.contacts.some(
-        contact => contact.name === value
+        contact => contact.name.toLowerCase() === value.toLowerCase()
       );
       if (isContain) {
         return alert(`${value} is already in contacts.`);
@@ -51,16 +51,24 @@ export class App extends Component {
   };
 
   render() {
-    const { getFoundContacts } = this;
+    const { filter } = this.state;
+    const {
+      handleSubmit,
+      handleFilterChange,
+      handleDeleteBtnClick,
+      getFoundContacts,
+    } = this;
     const filteredContacts = getFoundContacts();
 
-    const { handleSubmit, handleFilterChange, handleDeleteBtnClick } = this;
     return (
       <Wrapper>
         <h1>Phonebook</h1>
         <ContactForm handleSubmit={handleSubmit}></ContactForm>
         <h2>Contacts</h2>
-        <Filter handleFilterChange={handleFilterChange}></Filter>
+        <Filter
+          handleFilterChange={handleFilterChange}
+          filter={filter}
+        ></Filter>
         <ContactList
           contacts={filteredContacts}
           handleDeleteBtnClick={handleDeleteBtnClick}

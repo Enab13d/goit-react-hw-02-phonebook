@@ -1,10 +1,10 @@
 import { FilterField, FilterLabel } from './Filter.styled';
 import PropTypes from 'prop-types';
-export const Filter = ({ handleFilterChange }) => {
+export const Filter = ({ handleFilterChange, filter }) => {
   return (
     <>
       <FilterLabel htmlFor="filter">Find contacts by name</FilterLabel>
-      <FilterField id="filter" onChange={handleFilterChange} />
+      <FilterField id="filter" onChange={handleFilterChange} value={filter} />
     </>
   );
 };
